@@ -1,4 +1,5 @@
-﻿using HeadWorkProject.Srvices.Repository;
+﻿using Acr.UserDialogs;
+using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Verification;
 using HeadWorkProject.View;
 using Prism.Commands;
@@ -14,8 +15,7 @@ namespace HeadWorkProject.ViewModel
     {
         private string _login="";
         private string _password="";
-        IRepository _repository;
-        ILoginValidation _validation;
+       
         public string Login
         {
             get { return _login; }
@@ -42,10 +42,19 @@ namespace HeadWorkProject.ViewModel
 
         public void TapButtonLogin(object obj)
         {
-            _validation._repository = _repository;
-            var res = _validation.Success(Login, Password);
+            IRepository rep = new Repository();
+            ILoginValidation loginValidation = new LoginValidation(rep);
+            var Id = loginValidation.Success(Login, Password);
+            if (Id != -1) ToMainList(Id);
+            else UserDialogs.Instance.ShowError("Неверный логин или пароль");
         }
 
+        public async void ToMainList(int id)
+        {
+            var param = new NavigationParameters();
+            param.Add("id", id);
+            await _navigationService.NavigateAsync($"{nameof(MainList)}", param);
+        }
         private DelegateCommand _navigateCommand;
         public DelegateCommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
 
@@ -65,11 +74,9 @@ namespace HeadWorkProject.ViewModel
         {
             Login = parameters.GetValue<string>(nameof(Login));
         }
-        public MainPageViewModel(INavigationService navigationService, IRepository repository, ILoginValidation validation)
+        public MainPageViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            _repository = repository;
-            _validation = validation;
         }
     }
 }

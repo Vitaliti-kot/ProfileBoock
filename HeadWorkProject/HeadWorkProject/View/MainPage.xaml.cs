@@ -33,6 +33,8 @@ namespace HeadWorkProject.View
 
         private void Enabled_Disabled_Button()
         {
+            if (_entryLogin != null && _entryPassword != null)
+            {
                 if (_entryLogin.Length >= 4 && _entryPassword.Length >= 8)
                 {
                     buttonAutorization.IsEnabled = true;
@@ -41,6 +43,8 @@ namespace HeadWorkProject.View
                 {
                     buttonAutorization.IsEnabled = false;
                 }
+            }
+                
         }
     }
 }
