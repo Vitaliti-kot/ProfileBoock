@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:Custom="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Title="Страница регистрации"
+             x:Class="HeadWorkProject.View.PageSignUp"
+              BackgroundColor="#51B6FD">
+
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="20" BackgroundColor="#51B6FD">
+        <Entry x:Name="entryLogin" Text="{Binding Login}" MaxLength="16" Placeholder = "введите логин" TextChanged="entryLogin_TextChanged" ClearButtonVisibility="WhileEditing"/>
+        <Entry x:Name="entryPassword1" Text ="{Binding Password1}" IsPassword="True" MaxLength="16" Placeholder="введите пароль" TextChanged="entryPassword1_TextChanged" ClearButtonVisibility="WhileEditing"/>
+        <Entry x:Name="entryPassword2" Text ="{Binding Password2}" IsPassword="True" MaxLength="16" Placeholder="повторите пароль" TextChanged="entryPassword2_TextChanged" ClearButtonVisibility="WhileEditing"/>
+        <Button x:Name="buttSignUp" Text="Зарегистрировать" IsEnabled="False" Command="{Binding NavigateToMainPage}" BackgroundColor="Blue" TextColor="White"/>
+    </StackLayout>
+</ContentPage>

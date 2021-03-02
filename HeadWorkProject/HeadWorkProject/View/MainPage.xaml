@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage    xmlns="http://xamarin.com/schemas/2014/forms"
+                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+                xmlns:Custom="http://prismlibrary.com"
+                x:Class="HeadWorkProject.View.MainPage"
+                prism:ViewModelLocator.AutowireViewModel="True"
+                Title="Авторизация"
+                BackgroundColor="#51B6FD">
+    
+    <StackLayout VerticalOptions="CenterAndExpand" Margin="20">
+        <Entry x:Name="entryLogin"  MaxLength="16"
+                FontSize ="15"
+               Text="{Binding Login}"
+               Placeholder="введите логин"
+               TextChanged="EntryLogin_TextChanged"
+               ClearButtonVisibility="WhileEditing"/>
+        <Entry  x:Name="entryPassword" IsPassword="true"
+                FontSize ="15"
+                Text="{Binding Password}"
+                Placeholder = "введите пароль"
+                MaxLength ="16"
+            TextChanged = "EntryPassword_TextChanged" ClearButtonVisibility="WhileEditing"/>
+        <Button  x:Name="buttonAutorization" Text = "Авторизоваться"
+                BackgroundColor="Blue"
+                TextColor ="White"
+                IsEnabled ="False"
+                 Command="{Binding ButtonLogin}" CornerRadius="10"
+                 />
+        <Label x:Name="buttonSignUp" Text="Зарегистрироваться" TextColor ="Blue"
+                TextDecorations ="Underline"
+                FontSize ="Large"
+                HorizontalTextAlignment ="Center">
+        </Label>
+        <Button x:Name="buttonSign" Command="{Binding NavigateCommand}" IsVisible="false"/>
+
+    </StackLayout>
+        
+</ContentPage>
