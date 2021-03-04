@@ -5,23 +5,32 @@ using HeadWorkProject.View;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
-using System;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
-   public class MainPageViewModel : BindableBase, INavigationAware, IDestructible
+    public class MainPageViewModel : BindableBase, INavigationAware, IDestructible
     {
-        private string _login="";
-        private string _password="";
-       
+        private string _login = "";
+        private string _password = "";
+        private int _id;
+        IRepository rep;
+        ILoginValidation loginValidation;
         public string Login
         {
             get { return _login; }
             set
             {
                 SetProperty(ref _login, value);
+            }
+        }
+        public int Id
+        {
+            get { return _id; }
+            set
+            {
+                SetProperty(ref _id, value);
             }
         }
 
@@ -42,31 +51,30 @@ namespace HeadWorkProject.ViewModel
 
         public void TapButtonLogin(object obj)
         {
-            IRepository rep = new Repository();
-            ILoginValidation loginValidation = new LoginValidation(rep);
-            var Id = loginValidation.Success(Login, Password);
-            if (Id != -1) ToMainList(Id);
+            Id = loginValidation.Success(Login, Password);
+            if (Id != -1) ExecuteToMainList();
             else UserDialogs.Instance.ShowError("Неверный логин или пароль");
         }
 
-        public async void ToMainList(int id)
+
+        private async void ExecuteToMainList()
         {
             var param = new NavigationParameters();
-            param.Add("id", id);
+            param.Add("id", Id);
             await _navigationService.NavigateAsync($"{nameof(MainList)}", param);
         }
+        
         private DelegateCommand _navigateCommand;
         public DelegateCommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
 
         private INavigationService _navigationService;
         public async void ExecuteNavigateCommand()
         {
-           await _navigationService.NavigateAsync($"{nameof(PageSignUp)}");
+            await _navigationService.NavigateAsync($"{nameof(PageSignUp)}");
         }
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-          //  Login = parameters.GetValue<string>(nameof(Login));
 
         }
 
@@ -74,9 +82,11 @@ namespace HeadWorkProject.ViewModel
         {
             Login = parameters.GetValue<string>(nameof(Login));
         }
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService, IRepository repository, ILoginValidation login)
         {
             _navigationService = navigationService;
+            rep = repository;
+            loginValidation = login;
         }
     }
 }
