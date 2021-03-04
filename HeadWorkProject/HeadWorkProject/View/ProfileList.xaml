@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HeadWorkProject.View.ProfileList"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:Custom="http://prismlibrary.com"
+             xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel"
+             x:DataType="viewmodel:ProfileListViewModel"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Title="Список профилей">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="exit" Order="Primary" IconImageSource="ic_exit_to_app.png" Priority="0"/>
+        <ToolbarItem Text="property" Order="Primary" IconImageSource="ic_settings.png" Priority="1"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <Grid RowDefinitions="0.3*,*">
+            <Grid Grid.Row="0">
+                <Label Text="{Binding Id}" HorizontalOptions="Center"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ListView ItemsSource="{Binding Profiles}" HasUnevenRows="True" SeparatorVisibility="Default">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <StackLayout BackgroundColor="AliceBlue">
+                                        <Image Source="{Binding Icon}"/>
+                                        <Label Text="{Binding NickName}" TextColor="Black" />
+                                        <Label Text="{Binding Name}" TextColor="Black"/>
+                                        <Label Text="{Binding DateCreation}" TextColor="Chartreuse"/>
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

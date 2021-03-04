@@ -10,16 +10,11 @@ using Xamarin.Forms.Xaml;
 namespace HeadWorkProject.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainList : ContentPage
+    public partial class ProfileList : ContentPage
     {
-        public MainList()
+        public ProfileList()
         {
             InitializeComponent();
-        }
-
-        private void ToolbarItem_Clicked(object sender, EventArgs e)
-        {
-
         }
     }
 }

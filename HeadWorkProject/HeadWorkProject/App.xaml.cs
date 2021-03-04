@@ -34,13 +34,13 @@ namespace HeadWorkProject
             containerRegistry.RegisterInstance<ILoginValidation>(Container.Resolve<LoginValidation>());
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
-            containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();           
-            containerRegistry.RegisterForNavigation<MainList, MainListViewModel>();
+            containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();
+            containerRegistry.RegisterForNavigation<ProfileList, ProfileListViewModel>();
         }
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            await NavigationService.NavigateAsync($"{nameof(MainPage)}");
+            await NavigationService.NavigateAsync($"NavigationPage/{nameof(MainPage)}");
         }
         #endregion
 

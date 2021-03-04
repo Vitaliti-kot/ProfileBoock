@@ -6,7 +6,7 @@ namespace HeadWorkProject.Model
 {
    public class Profile
     {
-        public string ProfileImage { get; set; }
+        public string Icon { get; set; }
         public string NickName { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }

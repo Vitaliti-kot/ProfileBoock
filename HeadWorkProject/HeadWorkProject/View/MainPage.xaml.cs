@@ -3,9 +3,11 @@ using HeadWorkProject.Srvices;
 using HeadWorkProject.Srvices.Repository;
 using System;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace HeadWorkProject.View
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
         string _entryLogin="";
@@ -46,5 +48,6 @@ namespace HeadWorkProject.View
             }
                 
         }
+
     }
 }

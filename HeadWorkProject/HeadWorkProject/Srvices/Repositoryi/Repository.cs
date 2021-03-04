@@ -21,6 +21,7 @@ namespace HeadWorkProject.Srvices.Repository
                 return database;
             });
         }
+
         public Task<int> DeleteAsync<T>(T entity) where T : IEntityBase, new()
         {
             return _database.Value.DeleteAsync(entity);
