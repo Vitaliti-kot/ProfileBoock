@@ -1,8 +1,4 @@
-﻿using HeadWorkProject.Model;
-using HeadWorkProject.Srvices;
-using HeadWorkProject.Srvices.Repository;
-using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace HeadWorkProject.View
@@ -10,8 +6,8 @@ namespace HeadWorkProject.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        string _entryLogin="";
-        string _entryPassword="";
+        string _entryLogin = "";
+        string _entryPassword = "";
         public MainPage()
         {
             InitializeComponent();
@@ -46,7 +42,7 @@ namespace HeadWorkProject.View
                     buttonAutorization.IsEnabled = false;
                 }
             }
-                
+
         }
 
     }

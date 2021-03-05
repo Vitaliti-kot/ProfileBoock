@@ -1,10 +1,14 @@
 ﻿using HeadWorkProject.Model;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
@@ -13,42 +17,48 @@ namespace HeadWorkProject.ViewModel
         private int _id;
         public readonly INavigationService _navigation;
         public ObservableCollection<Profile> profiles;
-        private string iconSource;
-        private string nickName;
-        private string firstName;
-        private string lastName;
-        private DateTime creationTime;
-        private string name;
-        public string Name
+        //private string iconSource;
+        //private string nickName;
+        //private string firstName;
+        //private string lastName;
+        //private DateTime creationTime;
+        //private string name;
+        private int userId;
+        public int UserId
         {
-            get { return name; }
-            set { name = $"{firstName} {lastName}"; }
+            get { return userId; }
+            set { SetProperty(ref userId, value); }
         }
-        public DateTime DateCreation
-        {
-            get { return creationTime; }
-            set { SetProperty(ref creationTime, value); }
-        }
-        public string LastName
-        {
-            get { return lastName; }
-            set { SetProperty(ref lastName, value); }
-        }
-        public string FirstName
-        {
-            get { return firstName; }
-            set { SetProperty(ref firstName, value); }
-        }
-        public string NickName
-        {
-            get { return nickName; }
-            set { SetProperty(ref nickName, value);}
-        }
-        public string Icon
-        {
-            get { return iconSource; }
-            set { SetProperty(ref iconSource, value); }
-        }
+        //public string Name
+        //{
+        //    get { return name; }
+        //    set { name = $"{firstName} {lastName}"; }
+        //}
+        //public DateTime DateCreation
+        //{
+        //    get { return creationTime; }
+        //    set { SetProperty(ref creationTime, value); }
+        //}
+        //public string LastName
+        //{
+        //    get { return lastName; }
+        //    set { SetProperty(ref lastName, value); }
+        //}
+        //public string FirstName
+        //{
+        //    get { return firstName; }
+        //    set { SetProperty(ref firstName, value); }
+        //}
+        //public string NickName
+        //{
+        //    get { return nickName; }
+        //    set { SetProperty(ref nickName, value);}
+        //}
+        //public string _Icon
+        //{
+        //    get { return iconSource; }
+        //    set { SetProperty(ref iconSource, value); }
+        //}
         public ObservableCollection<Profile> Profiles
         {
             get { return profiles; }
@@ -71,7 +81,8 @@ namespace HeadWorkProject.ViewModel
             {
                 new Profile()
                 {
-                    Icon="pic_profile.png",
+                    userId=UserId,
+                    _Icon="pic_profile.png",
                     NickName="VP",
                     FirstName="Vasia",
                     LastName="Pupkin",
@@ -79,7 +90,8 @@ namespace HeadWorkProject.ViewModel
                 },
                  new Profile()
                 {
-                    Icon="pic_profile.png",
+                     userId=UserId,
+                    _Icon="pic_profile.png",
                     NickName="VPV",
                     FirstName="Masha",
                     LastName="Rasputina",
@@ -101,5 +113,6 @@ namespace HeadWorkProject.ViewModel
         {
             Id = parameters.GetValue<int>($"{nameof(Id)}");
         }
+
     }
 }

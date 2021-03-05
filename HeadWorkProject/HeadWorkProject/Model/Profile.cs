@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SQLite;
+using System;
 
 namespace HeadWorkProject.Model
 {
-   public class Profile
+    public class Profile : IEntityBase
     {
-        public string Icon { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int userId { get; set; }
+        public string _Icon { get; set; }
         public string NickName { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public DateTime DateCreation { get; set; }
+        public int Id { get; set; }
     }
 }
