@@ -1,15 +1,13 @@
-﻿using HeadWorkProject.Model;
-using HeadWorkProject.Srvices;
-using HeadWorkProject.Srvices.Repository;
-using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace HeadWorkProject.View
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage
     {
-        string _entryLogin="";
-        string _entryPassword="";
+        string _entryLogin = "";
+        string _entryPassword = "";
         public MainPage()
         {
             InitializeComponent();
@@ -33,6 +31,8 @@ namespace HeadWorkProject.View
 
         private void Enabled_Disabled_Button()
         {
+            if (_entryLogin != null && _entryPassword != null)
+            {
                 if (_entryLogin.Length >= 4 && _entryPassword.Length >= 8)
                 {
                     buttonAutorization.IsEnabled = true;
@@ -41,6 +41,9 @@ namespace HeadWorkProject.View
                 {
                     buttonAutorization.IsEnabled = false;
                 }
+            }
+
         }
+
     }
 }

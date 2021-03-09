@@ -1,23 +1,23 @@
 ﻿using HeadWorkProject.Model;
+using HeadWorkProject.Srvices.Repository;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace HeadWorkProject.Srvices.Repository
+namespace HeadWorkProject.Srvices.Repositoryi
 {
-    public class Repository : IRepository
+    public class ProfilesRepository : IRepository
     {
         private Lazy<SQLiteAsyncConnection> _database;
-        public Repository()
+        public ProfilesRepository()
         {
             _database = new Lazy<SQLiteAsyncConnection>(() =>
             {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"Users.db3");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Profiles.db3");
                 var database = new SQLiteAsyncConnection(path);
-                database.CreateTableAsync<User>();
+                database.CreateTableAsync<Profile>();
                 return database;
             });
         }

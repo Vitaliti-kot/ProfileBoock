@@ -1,4 +1,5 @@
-﻿using HeadWorkProject.Srvices.Repository;
+﻿using Acr.UserDialogs;
+using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Verification;
 using HeadWorkProject.View;
 using Prism.Commands;
@@ -10,18 +11,27 @@ using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
-   public class MainPageViewModel : BindableBase, INavigationAware, IDestructible
+    public class MainPageViewModel : BindableBase, INavigationAware, IDestructible
     {
-        private string _login="";
-        private string _password="";
-        IRepository _repository;
-        ILoginValidation _validation;
+        private string _login;
+        private string _password;
+        private int _id;
+        IRepository rep;
+        ILoginValidation loginValidation;
         public string Login
         {
             get { return _login; }
             set
             {
                 SetProperty(ref _login, value);
+            }
+        }
+        public int Id
+        {
+            get { return _id; }
+            set
+            {
+                SetProperty(ref _id, value);
             }
         }
 
@@ -38,38 +48,44 @@ namespace HeadWorkProject.ViewModel
             throw new System.NotImplementedException();
         }
 
-        public ICommand ButtonLogin => new Command(TapButtonLogin);
-
-        public void TapButtonLogin(object obj)
-        {
-            _validation._repository = _repository;
-            var res = _validation.Success(Login, Password);
-        }
 
         private DelegateCommand _navigateCommand;
-        public DelegateCommand NavigateCommand => _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
+        public DelegateCommand NavigateToMainList => _navigateCommand ?? (_navigateCommand = new DelegateCommand(TapButtonLogin));
+        private async void TapButtonLogin()
+        {
+            Id = loginValidation.Success(Login, Password);
+            if (Id == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
+            else{
+                //UserDialogs.Instance.Alert($"Id={Id}");
+                var parameters = new NavigationParameters();
+                parameters.Add(nameof(Id), Id);
+                await _navigationService.NavigateAsync($"/NavigationPage/{nameof(ProfileList)}", parameters);
+            }
+        }
+        private DelegateCommand _navigateCommand1;
+        public DelegateCommand NavigateToPageSignIn => _navigateCommand1 ?? (_navigateCommand1 = new DelegateCommand(ExecuteNavigateCommand));
 
-        private INavigationService _navigationService;
+        private readonly INavigationService _navigationService;
         public async void ExecuteNavigateCommand()
         {
-           await _navigationService.NavigateAsync($"{nameof(PageSignUp)}");
+            await _navigationService.NavigateAsync($"{nameof(PageSignUp)}");
         }
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-          //  Login = parameters.GetValue<string>(nameof(Login));
 
         }
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
             Login = parameters.GetValue<string>(nameof(Login));
+            rep = new Repository();
         }
-        public MainPageViewModel(INavigationService navigationService, IRepository repository, ILoginValidation validation)
+        public MainPageViewModel(INavigationService navigationService, IRepository repository, ILoginValidation login)
         {
             _navigationService = navigationService;
-            _repository = repository;
-            _validation = validation;
+            rep = repository;
+            loginValidation = login;
         }
     }
 }

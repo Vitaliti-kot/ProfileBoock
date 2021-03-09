@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HeadWorkProject.View.ProfileList"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:Custom="http://prismlibrary.com"
+             xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel"
+             xmlns:model="clr-namespace:HeadWorkProject.Model"
+             xmlns:prism1="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
+             x:DataType="viewmodel:ProfileListViewModel"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             Title="Список профилей">
+   
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="exit" Order="Primary" IconImageSource="ic_exit_to_app.png" Priority="0"/>
+        <ToolbarItem Text="property" Order="Primary" IconImageSource="ic_settings.png" Priority="1"/>
+    </ContentPage.ToolbarItems>
+    <Grid>
+        <ListView x:Name="listView" ItemsSource="{Binding profiles}" HasUnevenRows="True" ItemTapped="ListView_ItemTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Изменить"
+                                      Clicked="MenuItemEdit_Clicked" />
+                            <MenuItem Text="Удалить"
+                                      Clicked="MenuItemDelete_Clicked" />
+                            <MenuItem IconImageSource="ic_settings.png"/>
+                        </ViewCell.ContextActions>
+                        <Grid Padding="10" x:DataType="model:Profile">
+                            <Frame CornerRadius="20" HasShadow="True">
+                                <StackLayout Orientation="Horizontal">
+                                <Image Source="{Binding _Icon}" HeightRequest="36" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                    <StackLayout VerticalOptions="Center" Padding="20,0,0,0">
+                                        <Label Text="{Binding NickName}" FontSize="Title"/>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{Binding FirstName}" FontSize="Subtitle"/>
+                                            <Label Text="{Binding LastName}" FontSize="Subtitle"/>
+                                        </StackLayout>
+                                        <Label Text="{Binding DateCreation}" FontSize="Small"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Command="{Binding EditProfileCommand}" x:Name="butEdit" IsVisible="false"/>
+        <Button Command="{Binding DeleteProfileCommand}" x:Name="butDelete" IsVisible="false"/>
+    </Grid>    
+</ContentPage>

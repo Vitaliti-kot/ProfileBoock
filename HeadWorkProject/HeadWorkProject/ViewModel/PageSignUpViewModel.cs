@@ -1,6 +1,5 @@
 ﻿using Acr.UserDialogs;
 using HeadWorkProject.Model;
-using HeadWorkProject.Srvices;
 using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Verification;
 using HeadWorkProject.View;
@@ -8,17 +7,15 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System.Collections.ObjectModel;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
     public class PageSignUpViewModel : BindableBase, INavigationAware, IDestructible
     {
-        private string _login="";
-        private string _password1="";
-        private string _password2="";
-        IRepository _repository;
+        private string _login = "";
+        private string _password1 = "";
+        private string _password2 = "";
+        IRepository _repository { get; set; }
         INewUserVerification _verification;
         public string Login
         {
@@ -54,20 +51,21 @@ namespace HeadWorkProject.ViewModel
         private DelegateCommand _navigateCommand;
         public DelegateCommand NavigateToMainPage => _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
 
-        private INavigationService _navigationService;
+        private readonly INavigationService _navigationService;
         private async void ExecuteNavigateCommand()
         {
             var usersFromDB = await _repository.GetAllAsync<User>();
             var usersCollection = new ObservableCollection<User>(usersFromDB);
             _verification._users = usersCollection;
             var res = _verification.IsCorrect(Login, Password1);
-            if (res != null) UserDialogs.Instance.ShowError(res);
+            if (res != null) UserDialogs.Instance.Alert(res);
             else
             {
                 var user = new User();
                 user.Login = Login;
                 user.Password = Password1;
                 var id = await _repository.InsertAsync(user);
+                UserDialogs.Instance.Alert($"id={id}");
                 user.Id = id;
                 var parameters = new NavigationParameters();
                 parameters.Add(nameof(Login), Login);
@@ -77,7 +75,7 @@ namespace HeadWorkProject.ViewModel
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-            
+
         }
 
         public void OnNavigatedTo(INavigationParameters parameters)
@@ -87,8 +85,8 @@ namespace HeadWorkProject.ViewModel
         public PageSignUpViewModel(INavigationService navigationService, IRepository repository, INewUserVerification userVerification)
         {
             _navigationService = navigationService;
-            _repository = repository;
             _verification = userVerification;
+            _repository = repository;
         }
     }
 }

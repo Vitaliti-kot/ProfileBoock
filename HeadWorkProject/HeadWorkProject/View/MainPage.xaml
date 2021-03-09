@@ -2,7 +2,7 @@
 <ContentPage    xmlns="http://xamarin.com/schemas/2014/forms"
                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                 xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-                xmlns:Custom="http://prismlibrary.com"
+                xmlns:Custom="http://prismlibrary.com" xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel" x:DataType="viewmodel:MainPageViewModel"
                 x:Class="HeadWorkProject.View.MainPage"
                 prism:ViewModelLocator.AutowireViewModel="True"
                 Title="Авторизация"
@@ -25,14 +25,14 @@
                 BackgroundColor="Blue"
                 TextColor ="White"
                 IsEnabled ="False"
-                 Command="{Binding ButtonLogin}" CornerRadius="10"
+                 Command="{Binding NavigateToMainList}"  CornerRadius="10"
                  />
         <Label x:Name="buttonSignUp" Text="Зарегистрироваться" TextColor ="Blue"
                 TextDecorations ="Underline"
                 FontSize ="Large"
                 HorizontalTextAlignment ="Center">
         </Label>
-        <Button x:Name="buttonSign" Command="{Binding NavigateCommand}" IsVisible="false"/>
+        <Button x:Name="buttonSign" Command="{Binding NavigateToPageSignIn}" IsVisible="false"/>
 
     </StackLayout>
         

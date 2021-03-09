@@ -29,18 +29,19 @@ namespace HeadWorkProject
         }
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
-            containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();
             containerRegistry.RegisterInstance<IRepository>(Container.Resolve<Repository>());
             containerRegistry.RegisterInstance<INewUserVerification>(Container.Resolve<NewUserVerification>());
             containerRegistry.RegisterInstance<ILoginValidation>(Container.Resolve<LoginValidation>());
-            containerRegistry.RegisterForNavigation<MainList, MainListViewModel>();
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();
+            containerRegistry.RegisterForNavigation<ProfileList, ProfileListViewModel>();
+            containerRegistry.RegisterForNavigation<ProfileView, ProfileViewViewModel>();
         }
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            await NavigationService.NavigateAsync($"{nameof(MainPage)}");
+            await NavigationService.NavigateAsync($"NavigationPage/{nameof(MainPage)}");
         }
         #endregion
 
