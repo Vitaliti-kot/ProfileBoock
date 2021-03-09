@@ -1,5 +1,7 @@
 ﻿using SQLite;
 using System;
+using System.Windows.Input;
+using Prism.Commands;
 
 namespace HeadWorkProject.Model
 {
@@ -13,5 +15,6 @@ namespace HeadWorkProject.Model
         public string FirstName { get; set; }
         public DateTime DateCreation { get; set; }
         public int Id { get; set; }
+
     }
 }

@@ -15,7 +15,7 @@ namespace HeadWorkProject.Srvices.Repository
         {
             _database = new Lazy<SQLiteAsyncConnection>(() =>
             {
-                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Users.db3");
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"Users.db3");
                 var database = new SQLiteAsyncConnection(path);
                 database.CreateTableAsync<User>();
                 return database;

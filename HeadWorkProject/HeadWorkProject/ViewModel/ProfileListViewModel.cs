@@ -1,4 +1,5 @@
-﻿using HeadWorkProject.Model;
+﻿using Acr.UserDialogs;
+using HeadWorkProject.Model;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
@@ -14,9 +15,12 @@ namespace HeadWorkProject.ViewModel
 {
     public class ProfileListViewModel : BindableBase, INavigationAware, IDestructible
     {
+       
         private int _id;
+        public DelegateCommand <object> EditProfileCommand { protected set; get; }
+        public ICommand DeleteProfileCommand { protected set; get; }
         public readonly INavigationService _navigation;
-        public ObservableCollection<Profile> profiles;
+        public ObservableCollection<Profile> profiles { get; set; }
         //private string iconSource;
         //private string nickName;
         //private string firstName;
@@ -59,11 +63,6 @@ namespace HeadWorkProject.ViewModel
         //    get { return iconSource; }
         //    set { SetProperty(ref iconSource, value); }
         //}
-        public ObservableCollection<Profile> Profiles
-        {
-            get { return profiles; }
-            set { SetProperty(ref profiles, value); }
-        }
         public int Id
         {
             get { return _id; }
@@ -76,8 +75,7 @@ namespace HeadWorkProject.ViewModel
         public ProfileListViewModel(INavigationService navigation)
         {
             _navigation = navigation;
-
-            Profiles = new ObservableCollection<Profile>()
+            profiles = new ObservableCollection<Profile>()
             {
                 new Profile()
                 {
@@ -98,7 +96,22 @@ namespace HeadWorkProject.ViewModel
                     DateCreation=DateTime.Now
                 }
             };
+            EditProfileCommand = new DelegateCommand<object>(EditProfile);
+            DeleteProfileCommand = new Command(DeleteProfile);
         }
+
+        public async void DeleteProfile(object obj)
+        {
+            var p = obj as Profile;
+            await UserDialogs.Instance.AlertAsync($"delet{p.NickName}");
+        }
+
+        public async void EditProfile(object obj)
+        {
+            var p = obj as Profile;
+            await UserDialogs.Instance.AlertAsync($"edit{p.NickName}");
+        }
+
         public void Destroy()
         {
             throw new NotImplementedException();
@@ -113,6 +126,5 @@ namespace HeadWorkProject.ViewModel
         {
             Id = parameters.GetValue<int>($"{nameof(Id)}");
         }
-
     }
 }

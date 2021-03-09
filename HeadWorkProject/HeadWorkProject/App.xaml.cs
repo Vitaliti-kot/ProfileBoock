@@ -36,6 +36,7 @@ namespace HeadWorkProject
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();
             containerRegistry.RegisterForNavigation<ProfileList, ProfileListViewModel>();
+            containerRegistry.RegisterForNavigation<ProfileView, ProfileViewViewModel>();
         }
         protected override async void OnInitialized()
         {
