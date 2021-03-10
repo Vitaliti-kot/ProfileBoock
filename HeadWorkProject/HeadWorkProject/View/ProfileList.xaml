@@ -6,7 +6,6 @@
              xmlns:Custom="http://prismlibrary.com"
              xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel"
              xmlns:model="clr-namespace:HeadWorkProject.Model"
-             xmlns:prism1="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
              x:DataType="viewmodel:ProfileListViewModel"
              prism:ViewModelLocator.AutowireViewModel="True"
              Title="Список профилей">
@@ -16,7 +15,10 @@
         <ToolbarItem Text="property" Order="Primary" IconImageSource="ic_settings.png" Priority="1"/>
     </ContentPage.ToolbarItems>
     <Grid>
-        <ListView x:Name="listView" ItemsSource="{Binding profiles}" HasUnevenRows="True" ItemTapped="ListView_ItemTapped">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ListView IsVisible="true" Grid.Row="0" x:Name="listView" ItemsSource="{Binding profiles}" HasUnevenRows="True" ItemTapped="ListView_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -46,6 +48,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button Grid.Row="0"  Command="{Binding AddNewProfile}" Text="+" FontAttributes="Bold" FontSize="Large" BackgroundColor="Blue" TextColor="White" FlowDirection="MatchParent" WidthRequest="60" BorderWidth="3" BorderColor="Black" CornerRadius="30" Margin="0,0,20,22" VerticalOptions="End" HorizontalOptions="End" HeightRequest="60"/>
         <Button Command="{Binding EditProfileCommand}" x:Name="butEdit" IsVisible="false"/>
         <Button Command="{Binding DeleteProfileCommand}" x:Name="butDelete" IsVisible="false"/>
     </Grid>    

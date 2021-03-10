@@ -70,6 +70,7 @@ namespace HeadWorkProject.ViewModel
                 var parameters = new NavigationParameters();
                 parameters.Add(nameof(Login), Login);
                 await _navigationService.NavigateAsync($"{nameof(MainPage)}", parameters);
+                
             }
         }
 

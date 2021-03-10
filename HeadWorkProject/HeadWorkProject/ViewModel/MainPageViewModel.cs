@@ -5,19 +5,22 @@ using HeadWorkProject.View;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
     public class MainPageViewModel : BindableBase, INavigationAware, IDestructible
     {
+        #region ---Fields---
         private string _login;
         private string _password;
         private int _id;
         IRepository rep;
         ILoginValidation loginValidation;
+        private DelegateCommand _navigateCommand;
+        private DelegateCommand _navigateCommand1;
+        private readonly INavigationService _navigationService;
+        #endregion
+        #region ---SetProperty---
         public string Login
         {
             get { return _login; }
@@ -26,7 +29,7 @@ namespace HeadWorkProject.ViewModel
                 SetProperty(ref _login, value);
             }
         }
-        public int Id
+        public int UserId
         {
             get { return _id; }
             set
@@ -43,29 +46,30 @@ namespace HeadWorkProject.ViewModel
                 SetProperty(ref _password, value);
             }
         }
+
+        #endregion
+        public DelegateCommand NavigateToPageSignIn => _navigateCommand1 ?? (_navigateCommand1 = new DelegateCommand(ExecuteNavigateCommand));
+        public DelegateCommand NavigateToMainList => _navigateCommand ?? (_navigateCommand = new DelegateCommand(TapButtonLogin));
+        #region ---Methods---
         public void Destroy()
         {
             throw new System.NotImplementedException();
         }
-
-
-        private DelegateCommand _navigateCommand;
-        public DelegateCommand NavigateToMainList => _navigateCommand ?? (_navigateCommand = new DelegateCommand(TapButtonLogin));
+       
         private async void TapButtonLogin()
         {
-            Id = loginValidation.Success(Login, Password);
-            if (Id == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
-            else{
-                //UserDialogs.Instance.Alert($"Id={Id}");
+            UserId = loginValidation.Success(Login, Password);
+            if (UserId == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
+            else
+            {
                 var parameters = new NavigationParameters();
-                parameters.Add(nameof(Id), Id);
-                await _navigationService.NavigateAsync($"/NavigationPage/{nameof(ProfileList)}", parameters);
+                parameters.Add(nameof(UserId), UserId);
+                 await _navigationService.NavigateAsync($"{nameof(ProfileList)}", parameters);
             }
         }
-        private DelegateCommand _navigateCommand1;
-        public DelegateCommand NavigateToPageSignIn => _navigateCommand1 ?? (_navigateCommand1 = new DelegateCommand(ExecuteNavigateCommand));
-
-        private readonly INavigationService _navigationService;
+      
+      
+       
         public async void ExecuteNavigateCommand()
         {
             await _navigationService.NavigateAsync($"{nameof(PageSignUp)}");
@@ -80,6 +84,7 @@ namespace HeadWorkProject.ViewModel
         {
             Login = parameters.GetValue<string>(nameof(Login));
             rep = new Repository();
+            loginValidation = new LoginValidation(rep);
         }
         public MainPageViewModel(INavigationService navigationService, IRepository repository, ILoginValidation login)
         {
@@ -87,5 +92,6 @@ namespace HeadWorkProject.ViewModel
             rep = repository;
             loginValidation = login;
         }
+        #endregion
     }
 }

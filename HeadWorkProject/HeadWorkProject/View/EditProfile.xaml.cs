@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
+using HeadWorkProject.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace HeadWorkProject.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ProfileView : ContentPage
+    public partial class EditProfile : ContentPage
     {
-        public ProfileView()
+        public EditProfile()
         {
             InitializeComponent();
         }
+
     }
 }

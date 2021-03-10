@@ -5,10 +5,11 @@ using Prism.Commands;
 
 namespace HeadWorkProject.Model
 {
-    public class Profile : IEntityBase
+    [Table("Profile")]
+    public class Profile : IEntityBaseProfile
     {
         [PrimaryKey, AutoIncrement]
-        public int userId { get; set; }
+        public int UserId { get; set; }
         public string _Icon { get; set; }
         public string NickName { get; set; }
         public string LastName { get; set; }
@@ -16,5 +17,6 @@ namespace HeadWorkProject.Model
         public DateTime DateCreation { get; set; }
         public int Id { get; set; }
 
+        public string Comments { get; set; }
     }
 }
