@@ -11,10 +11,10 @@ namespace HeadWorkProject.Srvices.Repositoryi
     public class ProfilesRepository : IRepositoryProfile
     {
         private Lazy<SQLiteAsyncConnection> _database;
-        public int _UserId { get; set; }
+        public int UserId { get; set; }
         public ProfilesRepository(int userId)
         {
-            _UserId = userId;
+            UserId = userId;
             _database = new Lazy<SQLiteAsyncConnection>(() =>
             {
                 var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Profiles.db3");
@@ -51,6 +51,11 @@ namespace HeadWorkProject.Srvices.Repositoryi
         public Task<int> UpdateAsync<T>(T entity) where T : IEntityBaseProfile, new()
         {
             return _database.Value.UpdateAsync(entity);
+        }
+
+        public Task<int> DeleteAllAsync<T>() where T : IEntityBaseProfile, new()
+        {
+            return _database.Value.DeleteAllAsync<T>();
         }
     }
 }

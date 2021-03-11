@@ -61,14 +61,18 @@ namespace HeadWorkProject.ViewModel
             if (res != null) UserDialogs.Instance.Alert(res);
             else
             {
-                var user = new User();
-                user.Login = Login;
-                user.Password = Password1;
+                var user = new User
+                {
+                    Login = Login,
+                    Password = Password1
+                };
                 var id = await _repository.InsertAsync(user);
                 UserDialogs.Instance.Alert($"id={id}");
                 user.Id = id;
-                var parameters = new NavigationParameters();
-                parameters.Add(nameof(Login), Login);
+                var parameters = new NavigationParameters
+                {
+                    { nameof(Login), Login }
+                };
                 await _navigationService.NavigateAsync($"{nameof(MainPage)}", parameters);
                 
             }

@@ -5,6 +5,7 @@ using HeadWorkProject.View;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using System.Threading.Tasks;
 
 namespace HeadWorkProject.ViewModel
 {
@@ -59,12 +60,15 @@ namespace HeadWorkProject.ViewModel
         private async void TapButtonLogin()
         {
             UserId = loginValidation.Success(Login, Password);
+            await Task.Delay(2000);
             if (UserId == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
             else
             {
-                var parameters = new NavigationParameters();
-                parameters.Add(nameof(UserId), UserId);
-                 await _navigationService.NavigateAsync($"{nameof(ProfileList)}", parameters);
+                var parameters = new NavigationParameters()
+                {
+                    { nameof(UserId), UserId }
+                };
+                await _navigationService.NavigateAsync($"{nameof(ProfileList)}", parameters);
             }
         }
       

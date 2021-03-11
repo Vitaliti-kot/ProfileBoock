@@ -10,7 +10,7 @@ namespace HeadWorkProject.Srvices.Verification
     public class LoginValidation : ILoginValidation
     {
         public IRepository _repository { get; set; }
-        public ObservableCollection<User> allUsers {get;set;}
+        public ObservableCollection<User> AllUsers {get;set;}
 
         public LoginValidation(IRepository repository)
         {
@@ -21,7 +21,7 @@ namespace HeadWorkProject.Srvices.Verification
         {
             int res = -1;
             
-                foreach (User user in allUsers)
+                foreach (User user in AllUsers)
                 {
                     if (user.Login == login && user.Password == password) return res = user.Id;
                 }
@@ -32,7 +32,7 @@ namespace HeadWorkProject.Srvices.Verification
         public async void GetUser()
         {
                 var users = await _repository.GetAllAsync<User>();
-                allUsers = new ObservableCollection<User>(users);
+                AllUsers = new ObservableCollection<User>(users);
         }
     }
 }

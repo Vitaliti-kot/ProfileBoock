@@ -23,7 +23,7 @@ namespace HeadWorkProject.ViewModel
 
         private readonly INavigationService _navigationService;
         private IRepositoryProfile _repositoryProfile;
-        public ObservableCollection<Profile> profiles { get; set; }
+        public ObservableCollection<Profile> Profiles { get; set; }
         //private string iconSource;
         //private string nickName;
         //private string firstName;
@@ -61,7 +61,7 @@ namespace HeadWorkProject.ViewModel
         //    get { return nickName; }
         //    set { SetProperty(ref nickName, value);}
         //}
-        //public string _Icon
+        //public string Icon
         //{
         //    get { return iconSource; }
         //    set { SetProperty(ref iconSource, value); }
@@ -78,8 +78,9 @@ namespace HeadWorkProject.ViewModel
         public ProfileListViewModel(INavigationService navigation)
         {
             _navigationService = navigation;
-            _repositoryProfile = new ProfilesRepository(UserId);
-            GetCollection();
+            _repositoryProfile = new ProfilesRepository();
+            Profiles = new ObservableCollection<Profile>();
+            
             EditProfileCommand = new Command(EditProfileComm);
             DeleteProfileCommand = new Command(DeleteProfile);
             AddNewProfile = new Command(AddProfile);
@@ -88,16 +89,20 @@ namespace HeadWorkProject.ViewModel
         private async void GetCollection()
         {
             var prfls = await _repositoryProfile.GetAllAsync<Profile>();
-            profiles = new ObservableCollection<Profile>(prfls);
+            Profiles.Clear();
+            foreach(Profile prof in prfls)
+            {
+                if(prof.UserId==UserId) Profiles.Add(prof);
+            }
         }
         public async void DeleteProfile(object obj)
         {
             var p = obj as Profile;
-            foreach(Profile pr in profiles)
+            foreach(Profile pr in Profiles)
             {
                 if (pr == p)
                 {
-                    profiles.Remove(p);
+                    Profiles.Remove(p);
                 }
             }
             await _repositoryProfile.DeleteAsync(p);
@@ -106,8 +111,10 @@ namespace HeadWorkProject.ViewModel
         public async void EditProfileComm(object obj)
         {
             var profile = obj as Profile;
-            var parameters = new NavigationParameters();
-            parameters.Add("profile", profile);
+            var parameters = new NavigationParameters
+            {
+                { "profile", profile }
+            };
             var res = await _navigationService.NavigateAsync($"{nameof(EditProfile)}", parameters);
         }
 
@@ -122,26 +129,33 @@ namespace HeadWorkProject.ViewModel
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
-            UserId = parameters.GetValue<int>($"{nameof(UserId)}");
-            var res = parameters.GetValue<Profile>("profile");
-            if (res != null)
+            try
             {
-                if (res.Id >= profiles.Count)
+                UserId = parameters.GetValue<int>($"{nameof(UserId)}");
+                GetCollection();
+            }
+            catch
+            {
+                var res = parameters.GetValue<Profile>("profile");
+                if (res != null)
                 {
-                    profiles.Add(res);
-                    InsertNewProfile(res);
-                }
-                else
-                {
-                    foreach (Profile p in profiles)
+                    if (res.Id >= Profiles.Count)
                     {
-                        if (p.Id == res.Id)
+                        Profiles.Add(res);
+                        InsertNewProfile(res);
+                    }
+                    else
+                    {
+                        foreach (Profile p in Profiles)
                         {
-                            int idx = profiles.IndexOf(p);
-                            profiles.RemoveAt(idx);
-                            profiles.Insert(idx, res);
-                            UpdateProfile(res);
-                            return;
+                            if (p.Id == res.Id)
+                            {
+                                int idx = Profiles.IndexOf(p);
+                                Profiles.RemoveAt(idx);
+                                Profiles.Insert(idx, res);
+                                UpdateProfile(res);
+                                return;
+                            }
                         }
                     }
                 }
@@ -159,17 +173,46 @@ namespace HeadWorkProject.ViewModel
         }
         public async void AddProfile()
         {
-            var profId = profiles.Count;
+            var profId = Profiles.Count;
             var newProfile = new Profile()
             {
                 UserId = UserId,
                 Id = profId,
-                _Icon = "not_icon.png",
+                Icon = "not_icon.png",
                 DateCreation = DateTime.Now
         };
-            var parameters = new NavigationParameters();
-            parameters.Add("profile", newProfile);
+            var parameters = new NavigationParameters
+            {
+                { "profile", newProfile }
+            };
             await _navigationService.NavigateAsync($"{nameof(EditProfile)}", parameters);
         }
+
+        private ICommand refreshListCommand;
+
+        public ICommand RefreshListCommand
+        {
+            get
+            {
+                if (refreshListCommand == null)
+                {
+                    refreshListCommand = new DelegateCommand(RefreshList);
+                }
+
+                return refreshListCommand;
+            }
+        }
+
+
+        private void RefreshList()
+        {
+            IsBusy = true;
+            GetCollection();
+            IsBusy = false;
+        }
+
+        private bool isBusy;
+
+        public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
     }
 }

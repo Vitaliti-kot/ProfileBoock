@@ -1,6 +1,6 @@
 ﻿using HeadWorkProject.Model;
 using System;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,18 +13,23 @@ namespace HeadWorkProject.View
         public ProfileList()
         {
             InitializeComponent();
-            //if (listView.Resources.Count == 0)
-            //{
-            //    listView.IsVisible = false;
-            //    emptyText.IsVisible = true;
-            //}
-            //else
-            //{
-            //    listView.IsVisible = true;
-            //    emptyText.IsVisible = false;
-            //}
+            Start();
         }
 
+        private async void Start()
+        {
+            await Task.Delay(2000);
+            if (listView.ItemTemplate == null)
+            {
+                listView.IsVisible = false;
+                IsEmptyList.IsVisible = true;
+            }
+            else
+            {
+                listView.IsVisible = true;
+                IsEmptyList.IsVisible = false;
+            }
+        }
         private void MenuItemEdit_Clicked(object sender, EventArgs e)
         {
             var item = sender as MenuItem;
@@ -51,8 +56,16 @@ namespace HeadWorkProject.View
                 NickName = profile.NickName,
                 DateCreation = profile.DateCreation,
                 UserId = profile.UserId,
-                _Icon = profile._Icon
+                Icon = profile.Icon
             };
         }
+
+        private void ListView_Refreshing(object sender, EventArgs e)
+        {
+            listView.RefreshCommand.Execute(sender);
+            Task.Delay(5000);
+            UpdateChildrenLayout();
+        }
+
     }
 }

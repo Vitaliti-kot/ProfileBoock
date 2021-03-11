@@ -4,8 +4,8 @@
              xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel"
              x:DataType="viewmodel:EditProfileViewModel"
              x:Class="HeadWorkProject.View.EditProfile"
-             Title="{Binding EditingProfile.NickName}">
-    
+             Title="{Binding EditingProfile.NickName}" NavigationPage.HasBackButton="True" NavigationPage.BackButtonTitle="Back"
+             >
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="save" Order="Primary" IconImageSource="ic_save.png" Priority="0" Command="{Binding SaveCommand}"/>
     </ContentPage.ToolbarItems>
@@ -19,7 +19,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="10" Padding="5">
-                <Image Source="{Binding EditingProfile._Icon}"/>
+                <Image Source="{Binding EditingProfile.Icon}"/>
             </Grid>
             <Grid Grid.Row="0" Margin="10">
                 <Button Text="Изменить фото" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="End" HorizontalOptions="End" Command="{Binding EditPhoto}"/>

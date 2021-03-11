@@ -11,6 +11,8 @@ namespace HeadWorkProject.Srvices.Repository
         Task<int> InsertAsync<T>(T entity) where T : IEntityBaseProfile, new();
         Task<int> DeleteAsync<T>(T entity) where T : IEntityBaseProfile, new();
         Task<int> UpdateAsync<T>(T entity) where T : IEntityBaseProfile, new();
-        Task<List<T>> GetAllAsync<T>() where T : IEntityBaseProfile, new();
+        Task <List<T>> GetAllAsync<T>() where T : IEntityBaseProfile, new();
+
+        Task<int> DeleteAllAsync<T>() where T : IEntityBaseProfile, new();
     }
 }
