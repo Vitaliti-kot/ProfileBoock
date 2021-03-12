@@ -23,49 +23,15 @@ namespace HeadWorkProject.ViewModel
 
         private readonly INavigationService _navigationService;
         private IRepositoryProfile _repositoryProfile;
+        private INavigationParameters _parameters;
         public ObservableCollection<Profile> Profiles { get; set; }
-        //private string iconSource;
-        //private string nickName;
-        //private string firstName;
-        //private string lastName;
-        //private DateTime creationTime;
-        //private string name;
+
         private int userId;
         public int UserId
         {
             get { return userId; }
             set { SetProperty(ref userId, value); }
         }
-        //public string Name
-        //{
-        //    get { return name; }
-        //    set { name = $"{firstName} {lastName}"; }
-        //}
-        //public DateTime DateCreation
-        //{
-        //    get { return creationTime; }
-        //    set { SetProperty(ref creationTime, value); }
-        //}
-        //public string LastName
-        //{
-        //    get { return lastName; }
-        //    set { SetProperty(ref lastName, value); }
-        //}
-        //public string FirstName
-        //{
-        //    get { return firstName; }
-        //    set { SetProperty(ref firstName, value); }
-        //}
-        //public string NickName
-        //{
-        //    get { return nickName; }
-        //    set { SetProperty(ref nickName, value);}
-        //}
-        //public string Icon
-        //{
-        //    get { return iconSource; }
-        //    set { SetProperty(ref iconSource, value); }
-        //}
         public int Id
         {
             get { return _id; }
@@ -79,11 +45,10 @@ namespace HeadWorkProject.ViewModel
         {
             _navigationService = navigation;
             _repositoryProfile = new ProfilesRepository();
-            Profiles = new ObservableCollection<Profile>();
-            
             EditProfileCommand = new Command(EditProfileComm);
             DeleteProfileCommand = new Command(DeleteProfile);
             AddNewProfile = new Command(AddProfile);
+            IsVisibleList();
         }
 
         private async void GetCollection()
@@ -97,15 +62,18 @@ namespace HeadWorkProject.ViewModel
         }
         public async void DeleteProfile(object obj)
         {
+            var prfls = await _repositoryProfile.GetAllAsync<Profile>();
             var p = obj as Profile;
-            foreach(Profile pr in Profiles)
+            foreach(Profile pr in prfls)
             {
-                if (pr == p)
+                if (pr.Id == p.Id&&p.UserId==pr.UserId)
                 {
-                    Profiles.Remove(p);
+                    var r = await _repositoryProfile.DeleteAsync(pr);
+                    
+                    break;
                 }
             }
-            await _repositoryProfile.DeleteAsync(p);
+            RefreshList();
         }
 
         public async void EditProfileComm(object obj)
@@ -129,15 +97,10 @@ namespace HeadWorkProject.ViewModel
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
-            try
-            {
                 UserId = parameters.GetValue<int>($"{nameof(UserId)}");
-                GetCollection();
-            }
-            catch
-            {
+                
                 var res = parameters.GetValue<Profile>("profile");
-                if (res != null)
+                if (res.NickName != null)
                 {
                     if (res.Id >= Profiles.Count)
                     {
@@ -150,21 +113,23 @@ namespace HeadWorkProject.ViewModel
                         {
                             if (p.Id == res.Id)
                             {
-                                int idx = Profiles.IndexOf(p);
-                                Profiles.RemoveAt(idx);
-                                Profiles.Insert(idx, res);
-                                UpdateProfile(res);
+                            DeleteProfile(p);
+                                //int idx = Profiles.IndexOf(p);
+                                //Profiles.RemoveAt(idx);
+                                //Profiles.Insert(idx, res);
+                            InsertNewProfile(res);
                                 return;
                             }
                         }
                     }
                 }
-            }
+            RefreshList();
         }
 
         private async void InsertNewProfile(Profile res)
         {
             await _repositoryProfile.InsertAsync(res);
+            RefreshList();
         }
 
         private async void UpdateProfile(Profile res)
@@ -173,15 +138,14 @@ namespace HeadWorkProject.ViewModel
         }
         public async void AddProfile()
         {
-            var profId = Profiles.Count;
             var newProfile = new Profile()
             {
                 UserId = UserId,
-                Id = profId,
+                Id=Profiles.Count,
                 Icon = "not_icon.png",
                 DateCreation = DateTime.Now
         };
-            var parameters = new NavigationParameters
+            var parameters = new NavigationParameters()
             {
                 { "profile", newProfile }
             };
@@ -214,5 +178,66 @@ namespace HeadWorkProject.ViewModel
         private bool isBusy;
 
         public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
+
+        private ICommand goBackCommand;
+
+        public ICommand GoBackCommand
+        {
+            get
+            {
+                if (goBackCommand == null)
+                {
+                    goBackCommand = new DelegateCommand(GoBack);
+                }
+
+                return goBackCommand;
+            }
+        }
+
+        private async void GoBack()
+        {
+            await _navigationService.GoBackAsync();
+        }
+
+        private void IsVisibleList()
+        {
+            GetCollection();
+            if (Profiles.Count == 0)
+            {
+                IsVisibleListView = false;
+                IsVisibleEmptyALert = true;
+            }
+            else
+            {
+                IsVisibleEmptyALert = false;
+                IsVisibleListView = true;
+            }
+        }
+        private bool isVisibleListView;
+
+        public bool IsVisibleListView { get => isVisibleListView; set => SetProperty(ref isVisibleListView,value); }
+
+        private bool isVisibleEmptyALert;
+
+        public bool IsVisibleEmptyALert { get => isVisibleEmptyALert; set => SetProperty(ref isVisibleEmptyALert, value); }
+
+        private ICommand propertyCommand;
+
+        public ICommand PropertyCommand
+        {
+            get
+            {
+                if (propertyCommand == null)
+                {
+                    propertyCommand = new DelegateCommand(Property);
+                }
+
+                return propertyCommand;
+            }
+        }
+
+        private void Property()
+        {
+        }
     }
 }

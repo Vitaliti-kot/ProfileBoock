@@ -1,4 +1,5 @@
-﻿using HeadWorkProject.Model;
+﻿using Acr.UserDialogs;
+using HeadWorkProject.Model;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -13,13 +14,13 @@ namespace HeadWorkProject.View
         public ProfileList()
         {
             InitializeComponent();
-            Start();
+            //Start();
         }
 
-        private async void Start()
+        private void Start()
         {
-            await Task.Delay(2000);
-            if (listView.ItemTemplate == null)
+         //   await Task.Delay(2000);
+            if (listView.Resources.Values.Count == 0)
             {
                 listView.IsVisible = false;
                 IsEmptyList.IsVisible = true;
@@ -63,7 +64,7 @@ namespace HeadWorkProject.View
         private void ListView_Refreshing(object sender, EventArgs e)
         {
             listView.RefreshCommand.Execute(sender);
-            Task.Delay(5000);
+           // Task.Delay(5000);
             UpdateChildrenLayout();
         }
 

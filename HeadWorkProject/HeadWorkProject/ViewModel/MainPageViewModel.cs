@@ -60,7 +60,7 @@ namespace HeadWorkProject.ViewModel
         private async void TapButtonLogin()
         {
             UserId = loginValidation.Success(Login, Password);
-            await Task.Delay(2000);
+           // await Task.Delay(2000);
             if (UserId == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
             else
             {
