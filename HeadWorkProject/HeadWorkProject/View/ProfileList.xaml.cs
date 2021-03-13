@@ -14,22 +14,12 @@ namespace HeadWorkProject.View
         public ProfileList()
         {
             InitializeComponent();
-            //Start();
         }
 
-        private void Start()
+        private async void Start()
         {
-         //   await Task.Delay(2000);
-            if (listView.Resources.Values.Count == 0)
-            {
-                listView.IsVisible = false;
-                IsEmptyList.IsVisible = true;
-            }
-            else
-            {
-                listView.IsVisible = true;
-                IsEmptyList.IsVisible = false;
-            }
+            await Task.Delay(2000);
+
         }
         private void MenuItemEdit_Clicked(object sender, EventArgs e)
         {

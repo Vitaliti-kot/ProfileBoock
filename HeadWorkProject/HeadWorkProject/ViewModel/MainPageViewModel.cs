@@ -60,13 +60,12 @@ namespace HeadWorkProject.ViewModel
         private async void TapButtonLogin()
         {
             UserId = loginValidation.Success(Login, Password);
-           // await Task.Delay(2000);
             if (UserId == -1) UserDialogs.Instance.Alert("Неверный логин или пароль");
             else
             {
-                var parameters = new NavigationParameters()
+                INavigationParameters parameters = new NavigationParameters()
                 {
-                    { nameof(UserId), UserId }
+                    { $"{nameof(UserId)}", UserId }
                 };
                 await _navigationService.NavigateAsync($"{nameof(ProfileList)}", parameters);
             }

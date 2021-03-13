@@ -36,7 +36,8 @@
                   x:Name="listView"
                   ItemsSource="{Binding Profiles}"
                   HasUnevenRows="True"
-                  ItemTapped="ListView_ItemTapped">
+                  ItemTapped="ListView_ItemTapped"
+                  >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

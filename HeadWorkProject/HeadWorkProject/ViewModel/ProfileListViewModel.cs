@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using HeadWorkProject.Model;
+﻿using HeadWorkProject.Model;
 using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Repositoryi;
 using HeadWorkProject.View;
@@ -17,6 +16,7 @@ namespace HeadWorkProject.ViewModel
     {
 
         private int _id;
+        public bool NavFromMainPage = true;
         public ICommand EditProfileCommand { protected set; get; }
         public ICommand DeleteProfileCommand { protected set; get; }
         public ICommand AddNewProfile { protected set; get; }
@@ -45,31 +45,32 @@ namespace HeadWorkProject.ViewModel
         {
             _navigationService = navigation;
             _repositoryProfile = new ProfilesRepository();
+            Profiles = new ObservableCollection<Profile>();
             EditProfileCommand = new Command(EditProfileComm);
             DeleteProfileCommand = new Command(DeleteProfile);
             AddNewProfile = new Command(AddProfile);
-            IsVisibleList();
         }
 
         private async void GetCollection()
         {
             var prfls = await _repositoryProfile.GetAllAsync<Profile>();
             Profiles.Clear();
-            foreach(Profile prof in prfls)
+            foreach (Profile prof in prfls)
             {
-                if(prof.UserId==UserId) Profiles.Add(prof);
+                if (prof.UserId == UserId) Profiles.Add(prof);
             }
+            IsVisibleList();
         }
         public async void DeleteProfile(object obj)
         {
             var prfls = await _repositoryProfile.GetAllAsync<Profile>();
             var p = obj as Profile;
-            foreach(Profile pr in prfls)
+            foreach (Profile pr in prfls)
             {
-                if (pr.Id == p.Id&&p.UserId==pr.UserId)
+                if (pr.Id == p.Id && p.UserId == pr.UserId)
                 {
                     var r = await _repositoryProfile.DeleteAsync(pr);
-                    
+
                     break;
                 }
             }
@@ -97,33 +98,36 @@ namespace HeadWorkProject.ViewModel
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
+            if (NavFromMainPage)
+            {
+                NavFromMainPage = false;
                 UserId = parameters.GetValue<int>($"{nameof(UserId)}");
-                
+                GetCollection();
+            }
+            else
+            {
                 var res = parameters.GetValue<Profile>("profile");
                 if (res.NickName != null)
                 {
-                    if (res.Id >= Profiles.Count)
+                    bool oldProfile = false;
+                    foreach (Profile p in Profiles)
+                    {
+                        if (p.Id == res.Id)
+                        {
+                            DeleteProfile(p);
+                            InsertNewProfile(res);
+                            oldProfile = true;
+                            return;
+                        }
+                    }
+                    if (!oldProfile)
                     {
                         Profiles.Add(res);
                         InsertNewProfile(res);
                     }
-                    else
-                    {
-                        foreach (Profile p in Profiles)
-                        {
-                            if (p.Id == res.Id)
-                            {
-                            DeleteProfile(p);
-                                //int idx = Profiles.IndexOf(p);
-                                //Profiles.RemoveAt(idx);
-                                //Profiles.Insert(idx, res);
-                            InsertNewProfile(res);
-                                return;
-                            }
-                        }
-                    }
                 }
-            RefreshList();
+            }
+
         }
 
         private async void InsertNewProfile(Profile res)
@@ -141,10 +145,10 @@ namespace HeadWorkProject.ViewModel
             var newProfile = new Profile()
             {
                 UserId = UserId,
-                Id=Profiles.Count,
+                Id = Profiles.Count,
                 Icon = "not_icon.png",
                 DateCreation = DateTime.Now
-        };
+            };
             var parameters = new NavigationParameters()
             {
                 { "profile", newProfile }
@@ -201,7 +205,6 @@ namespace HeadWorkProject.ViewModel
 
         private void IsVisibleList()
         {
-            GetCollection();
             if (Profiles.Count == 0)
             {
                 IsVisibleListView = false;
@@ -215,7 +218,7 @@ namespace HeadWorkProject.ViewModel
         }
         private bool isVisibleListView;
 
-        public bool IsVisibleListView { get => isVisibleListView; set => SetProperty(ref isVisibleListView,value); }
+        public bool IsVisibleListView { get => isVisibleListView; set => SetProperty(ref isVisibleListView, value); }
 
         private bool isVisibleEmptyALert;
 
