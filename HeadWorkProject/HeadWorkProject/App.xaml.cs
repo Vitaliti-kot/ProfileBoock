@@ -40,6 +40,7 @@ namespace HeadWorkProject
             containerRegistry.RegisterForNavigation<ProfileList, ProfileListViewModel>();
             containerRegistry.RegisterForNavigation<EditProfile, EditProfileViewModel>();
             containerRegistry.RegisterDialog<ImageDialog, DialogViewModel>();
+            containerRegistry.RegisterForNavigation<PropertyPageView, PropertyPageViewModel>();
         }
         protected override async void OnInitialized()
         {

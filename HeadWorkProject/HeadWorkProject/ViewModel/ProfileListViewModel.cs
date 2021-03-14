@@ -263,8 +263,9 @@ namespace HeadWorkProject.ViewModel
             }
         }
 
-        private void Property()
+        private async void Property()
         {
+            await _navigationService.NavigateAsync($"{nameof(PropertyPageView)}");
         }
     }
 }

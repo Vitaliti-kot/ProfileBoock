@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HeadWorkProject.View.PropertyPageView">
+    <ContentPage.Content>
+        <StackLayout Margin="16">
+            <Label Text="Сортировка..." HorizontalOptions="Center"/>
+            <RadioButton Content="По имени" Padding="10"/>
+            <RadioButton Content="По нику" Padding="10"/>
+            <RadioButton Content="По дате" Padding="10"/>
+            <Label Text="Другое..." HorizontalOptions="Center"/>
+            <CheckBox />
+            <Button Text="Изменить язык"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

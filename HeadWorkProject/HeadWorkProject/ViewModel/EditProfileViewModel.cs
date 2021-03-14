@@ -4,14 +4,24 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using System;
+using System.IO;
 using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace HeadWorkProject.ViewModel
 {
    public class EditProfileViewModel : BindableBase, INavigationAware, IDestructible
     {
-
         private readonly INavigationService _navigationService;
+        public bool GoBackButOn = false;
+        private string _icon;
+        public string Icon
+        {
+            get { return _icon; }
+            set { SetProperty(ref _icon, value); }
+        }
+
         private Profile _profile;
         public Profile EditingProfile
         {
@@ -24,7 +34,6 @@ namespace HeadWorkProject.ViewModel
         public EditProfileViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
-            EditingProfile = new Profile();
             
         }
        
@@ -54,13 +63,40 @@ namespace HeadWorkProject.ViewModel
                         );
         }
 
-        private void OpenCamera()
+        private async void OpenCamera()
         {
+            try
+            {
+                var photo = await MediaPicker.CapturePhotoAsync(new MediaPickerOptions
+                {
+                    Title = $"xamarin.{DateTime.Now.ToString("dd.MM.yyyy_hh.mm.ss")}.png"
+                });
 
+                var newFile = Path.Combine(FileSystem.AppDataDirectory, photo.FileName);
+                using (var stream = await photo.OpenReadAsync())
+                using (var newStream = File.OpenWrite(newFile))
+                    await stream.CopyToAsync(newStream);
+                EditingProfile.Icon = photo.FullPath;
+                Icon = photo.FullPath;
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync("Сообщение об ошибке", ex.Message, "OK");
+            }
         }
-        private void OpenFolder()
-        {
 
+        private async void OpenFolder()
+        {
+            try
+            {
+                var photo = await MediaPicker.PickPhotoAsync();
+                EditingProfile.Icon = photo.FullPath;
+                Icon = photo.FullPath;
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync("Сообщение об ошибке", ex.Message, "OK");
+            }
         }
 
         private ICommand nickNameChangedCommand;
@@ -132,13 +168,14 @@ namespace HeadWorkProject.ViewModel
 
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
-            parameters.Add("profile", EditingProfile);
+            if(GoBackButOn) parameters.Add("profile", EditingProfile);
         }
 
         public void OnNavigatedTo(INavigationParameters parameters)
         {
             
             EditingProfile = parameters.GetValue<Profile>("profile");
+            Icon = EditingProfile.Icon;
         }
 
         private ICommand saveCommand;
@@ -158,6 +195,7 @@ namespace HeadWorkProject.ViewModel
 
         private async void Save()
         {
+            GoBackButOn = true;
             await _navigationService.GoBackAsync();
         }
     }
