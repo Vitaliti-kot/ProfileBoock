@@ -12,11 +12,17 @@ namespace HeadWorkProject.ViewModel
 {
     public class PageSignUpViewModel : BindableBase, INavigationAware, IDestructible
     {
-        private string _login = "";
-        private string _password1 = "";
-        private string _password2 = "";
+        #region ---Fields---
+        private string _login;
+        private string _password1;
+        private string _password2;
+        private DelegateCommand _navigateCommand;
+        private readonly INavigationService _navigationService;
         IRepository _repository { get; set; }
         INewUserVerification _verification;
+        #endregion
+
+        #region ---SetProperty---
         public string Login
         {
             get { return _login; }
@@ -42,16 +48,16 @@ namespace HeadWorkProject.ViewModel
                 SetProperty(ref _password2, value);
             }
         }
+        #endregion
 
+        #region ---Methods---
         public void Destroy()
         {
             throw new System.NotImplementedException();
         }
-
-        private DelegateCommand _navigateCommand;
         public DelegateCommand NavigateToMainPage => _navigateCommand ?? (_navigateCommand = new DelegateCommand(ExecuteNavigateCommand));
 
-        private readonly INavigationService _navigationService;
+
         private async void ExecuteNavigateCommand()
         {
             var usersFromDB = await _repository.GetAllAsync<User>();
@@ -67,15 +73,13 @@ namespace HeadWorkProject.ViewModel
                     Password = Password1
                 };
                 var id = await _repository.InsertAsync(user);
-               // UserDialogs.Instance.Alert($"id={id}");
                 user.Id = id;
                 var parameters = new NavigationParameters
                 {
                     { nameof(Login), Login }
                 };
                 await _navigationService.GoBackAsync(parameters);
-               // await _navigationService.NavigateAsync($"{nameof(MainPage)}", parameters);
-                
+
             }
         }
 
@@ -88,6 +92,8 @@ namespace HeadWorkProject.ViewModel
         {
 
         }
+
+        #endregion
         public PageSignUpViewModel(INavigationService navigationService, IRepository repository, INewUserVerification userVerification)
         {
             _navigationService = navigationService;

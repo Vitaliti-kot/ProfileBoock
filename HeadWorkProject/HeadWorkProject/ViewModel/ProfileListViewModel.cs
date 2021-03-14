@@ -16,28 +16,35 @@ namespace HeadWorkProject.ViewModel
 {
     public class ProfileListViewModel : BindableBase, INavigationAware, IDestructible
     {
-
+        #region ---Fields---
         private int _id;
         private string _icon;
         public bool NavFromMainPage = true;
+        private int userId;
+        private bool isBusy;
+        private bool isVisibleListView;
+        private bool isVisibleEmptyALert;
+        private ICommand propertyCommand;
+        private ICommand goBackCommand;
+        private ICommand refreshListCommand;
         public ICommand EditProfileCommand { protected set; get; }
         public ICommand DeleteProfileCommand { protected set; get; }
         public ICommand AddNewProfile { protected set; get; }
         public ICommand ShowDialog { protected set; get; }
-
         private readonly INavigationService _navigationService;
         private IRepositoryProfile _repositoryProfile;
         private INavigationParameters _parameters;
         private IDialogService _dialogService { get; }
         public ObservableCollection<Profile> Profiles { get; set; }
+        #endregion
 
-        private int userId;
+        #region ---SetProperty---
+        public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
         public int UserId
         {
             get { return userId; }
             set { SetProperty(ref userId, value); }
         }
-
         public string Icon
         {
             get { return _icon; }
@@ -54,6 +61,45 @@ namespace HeadWorkProject.ViewModel
                 SetProperty(ref _id, value);
             }
         }
+        public ICommand RefreshListCommand
+        {
+            get
+            {
+                if (refreshListCommand == null)
+                {
+                    refreshListCommand = new DelegateCommand(RefreshList);
+                }
+
+                return refreshListCommand;
+            }
+        }
+        public ICommand GoBackCommand
+        {
+            get
+            {
+                if (goBackCommand == null)
+                {
+                    goBackCommand = new DelegateCommand(GoBack);
+                }
+
+                return goBackCommand;
+            }
+        }
+        public ICommand PropertyCommand
+        {
+            get
+            {
+                if (propertyCommand == null)
+                {
+                    propertyCommand = new DelegateCommand(Property);
+                }
+
+                return propertyCommand;
+            }
+        }
+        public bool IsVisibleListView { get => isVisibleListView; set => SetProperty(ref isVisibleListView, value); }
+        public bool IsVisibleEmptyALert { get => isVisibleEmptyALert; set => SetProperty(ref isVisibleEmptyALert, value); }
+        #endregion
 
         public ProfileListViewModel(INavigationService navigation, IDialogService dialogService)
         {
@@ -67,6 +113,7 @@ namespace HeadWorkProject.ViewModel
             ShowDialog = new Command(OnShowDialogExecute);
         }
 
+        #region ---Methods---
         private void OnShowDialogExecute(object obj)
         {
             Icon = obj.ToString();
@@ -100,7 +147,6 @@ namespace HeadWorkProject.ViewModel
             }
             RefreshList();
         }
-
         public async void EditProfileComm(object obj)
         {
             var profile = obj as Profile;
@@ -110,16 +156,13 @@ namespace HeadWorkProject.ViewModel
             };
             var res = await _navigationService.NavigateAsync($"{nameof(EditProfile)}", parameters);
         }
-
         public void Destroy()
         {
             throw new NotImplementedException();
         }
-
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
         }
-
         public void OnNavigatedTo(INavigationParameters parameters)
         {
             if (NavFromMainPage)
@@ -153,13 +196,11 @@ namespace HeadWorkProject.ViewModel
             }
 
         }
-
         private async void InsertNewProfile(Profile res)
         {
             await _repositoryProfile.InsertAsync(res);
             RefreshList();
         }
-
         private async void UpdateProfile(Profile res)
         {
             await _repositoryProfile.UpdateAsync(res);
@@ -179,54 +220,16 @@ namespace HeadWorkProject.ViewModel
             };
             await _navigationService.NavigateAsync($"{nameof(EditProfile)}", parameters);
         }
-
-        private ICommand refreshListCommand;
-
-        public ICommand RefreshListCommand
-        {
-            get
-            {
-                if (refreshListCommand == null)
-                {
-                    refreshListCommand = new DelegateCommand(RefreshList);
-                }
-
-                return refreshListCommand;
-            }
-        }
-
-
         private void RefreshList()
         {
             IsBusy = true;
             GetCollection();
             IsBusy = false;
         }
-
-        private bool isBusy;
-
-        public bool IsBusy { get => isBusy; set => SetProperty(ref isBusy, value); }
-
-        private ICommand goBackCommand;
-
-        public ICommand GoBackCommand
-        {
-            get
-            {
-                if (goBackCommand == null)
-                {
-                    goBackCommand = new DelegateCommand(GoBack);
-                }
-
-                return goBackCommand;
-            }
-        }
-
         private async void GoBack()
         {
             await _navigationService.GoBackAsync();
         }
-
         private void IsVisibleList()
         {
             if (Profiles.Count == 0)
@@ -240,32 +243,10 @@ namespace HeadWorkProject.ViewModel
                 IsVisibleListView = true;
             }
         }
-        private bool isVisibleListView;
-
-        public bool IsVisibleListView { get => isVisibleListView; set => SetProperty(ref isVisibleListView, value); }
-
-        private bool isVisibleEmptyALert;
-
-        public bool IsVisibleEmptyALert { get => isVisibleEmptyALert; set => SetProperty(ref isVisibleEmptyALert, value); }
-
-        private ICommand propertyCommand;
-
-        public ICommand PropertyCommand
-        {
-            get
-            {
-                if (propertyCommand == null)
-                {
-                    propertyCommand = new DelegateCommand(Property);
-                }
-
-                return propertyCommand;
-            }
-        }
-
         private async void Property()
         {
             await _navigationService.NavigateAsync($"{nameof(PropertyPageView)}");
         }
+        #endregion
     }
 }

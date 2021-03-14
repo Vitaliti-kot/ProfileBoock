@@ -13,16 +13,24 @@ namespace HeadWorkProject.ViewModel
 {
    public class EditProfileViewModel : BindableBase, INavigationAware, IDestructible
     {
+        #region ---Fields---
         private readonly INavigationService _navigationService;
         public bool GoBackButOn = false;
         private string _icon;
+        private Profile _profile;
+        private ICommand editPhoto;
+        private ICommand nickNameChangedCommand;
+        private ICommand firstNameChangedCommand;
+        private ICommand lastNameChangedCommand;
+        private ICommand saveCommand;
+        #endregion
+
+        #region ---SetProperty---
         public string Icon
         {
             get { return _icon; }
             set { SetProperty(ref _icon, value); }
         }
-
-        private Profile _profile;
         public Profile EditingProfile
         {
             get { return _profile; }
@@ -31,15 +39,6 @@ namespace HeadWorkProject.ViewModel
                 SetProperty(ref _profile, value);
             }
         }
-        public EditProfileViewModel(INavigationService navigationService)
-        {
-            _navigationService = navigationService;
-            
-        }
-       
-
-        private ICommand editPhoto;
-
         public ICommand EditPhoto
         {
             get
@@ -52,7 +51,63 @@ namespace HeadWorkProject.ViewModel
                 return editPhoto;
             }
         }
+        public ICommand NickNameChangedCommand
+        {
+            get
+            {
+                if (nickNameChangedCommand == null)
+                {
+                    nickNameChangedCommand = new DelegateCommand<object>(NickNameChanged);
+                }
 
+                return nickNameChangedCommand;
+            }
+        }
+        public ICommand FirstNameChangedCommand
+        {
+            get
+            {
+                if (firstNameChangedCommand == null)
+                {
+                    firstNameChangedCommand = new DelegateCommand<object>(FirstNameChanged);
+                }
+
+                return firstNameChangedCommand;
+            }
+        }
+        public ICommand LastNameChangedCommand
+        {
+            get
+            {
+                if (lastNameChangedCommand == null)
+                {
+                    lastNameChangedCommand = new DelegateCommand<string>(LastNameChanged);
+                }
+
+                return lastNameChangedCommand;
+            }
+        }
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (saveCommand == null)
+                {
+                    saveCommand = new DelegateCommand(Save);
+                }
+
+                return saveCommand;
+            }
+        }
+        #endregion
+
+
+        public EditProfileViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+            
+        }
+        #region ---Methods---
         private void PerformEditPhoto()
         {
             UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
@@ -62,7 +117,6 @@ namespace HeadWorkProject.ViewModel
                             .SetCancel("Закрыть",null)
                         );
         }
-
         private async void OpenCamera()
         {
             try
@@ -84,7 +138,6 @@ namespace HeadWorkProject.ViewModel
                 await UserDialogs.Instance.AlertAsync("Сообщение об ошибке", ex.Message, "OK");
             }
         }
-
         private async void OpenFolder()
         {
             try
@@ -98,105 +151,39 @@ namespace HeadWorkProject.ViewModel
                 await UserDialogs.Instance.AlertAsync("Сообщение об ошибке", ex.Message, "OK");
             }
         }
-
-        private ICommand nickNameChangedCommand;
-
-        public ICommand NickNameChangedCommand
-        {
-            get
-            {
-                if (nickNameChangedCommand == null)
-                {
-                    nickNameChangedCommand = new DelegateCommand<object>(NickNameChanged);
-                }
-
-                return nickNameChangedCommand;
-            }
-        }
-
         private void NickNameChanged(object obj)
         {
             string nickName = obj.ToString();
             EditingProfile.NickName = nickName;
         }
-
-        private ICommand firstNameChangedCommand;
-
-        public ICommand FirstNameChangedCommand
-        {
-            get
-            {
-                if (firstNameChangedCommand == null)
-                {
-                    firstNameChangedCommand = new DelegateCommand<object>(FirstNameChanged);
-                }
-
-                return firstNameChangedCommand;
-            }
-        }
-
         private void FirstNameChanged(object obj)
         {
             string firstName = obj.ToString();
             EditingProfile.FirstName = firstName;
         }
-
-        private ICommand lastNameChangedCommand;
-
-        public ICommand LastNameChangedCommand
-        {
-            get
-            {
-                if (lastNameChangedCommand == null)
-                {
-                    lastNameChangedCommand = new DelegateCommand<string>(LastNameChanged);
-                }
-
-                return lastNameChangedCommand;
-            }
-        }
-
         private void LastNameChanged(string lastName)
         {
             EditingProfile.LastName = lastName;
         }
-
         public void Destroy()
         {
             throw new NotImplementedException();
         }
-
         public void OnNavigatedFrom(INavigationParameters parameters)
         {
             if(GoBackButOn) parameters.Add("profile", EditingProfile);
         }
-
         public void OnNavigatedTo(INavigationParameters parameters)
         {
             
             EditingProfile = parameters.GetValue<Profile>("profile");
             Icon = EditingProfile.Icon;
         }
-
-        private ICommand saveCommand;
-
-        public ICommand SaveCommand
-        {
-            get
-            {
-                if (saveCommand == null)
-                {
-                    saveCommand = new DelegateCommand(Save);
-                }
-
-                return saveCommand;
-            }
-        }
-
         private async void Save()
         {
             GoBackButOn = true;
             await _navigationService.GoBackAsync();
         }
+        #endregion
     }
 }

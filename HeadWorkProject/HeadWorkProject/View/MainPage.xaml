@@ -9,8 +9,9 @@
                
                 prism:ViewModelLocator.AutowireViewModel="True"
                 Title="Авторизация"
-                BackgroundColor="#51B6FD">
-    
+                BackgroundColor="#51B6FD"
+                Style="{Binding }">
+   
     <StackLayout VerticalOptions="CenterAndExpand" Margin="20">
         <Entry x:Name="entryLogin"  MaxLength="16"
                 FontSize ="15"

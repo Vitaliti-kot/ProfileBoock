@@ -12,9 +12,16 @@ namespace HeadWorkProject.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class PropertyPageView : ContentPage
     {
+        bool strt = true;
         public PropertyPageView()
         {
             InitializeComponent();
+        }
+
+        private void CheckBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+        {
+            if (!strt) setTheme.Command.Execute(e.Value);
+            else strt = false;
         }
     }
 }

@@ -45,6 +45,12 @@ namespace HeadWorkProject
         protected override async void OnInitialized()
         {
             InitializeComponent();
+            App.Current.UserAppTheme = OSAppTheme.Dark;
+            App.Current.SetAppThemeColor(MenuProperty, Color.Aqua, Color.Black);
+            App.Current.SetAppThemeColor(ClassIdProperty, Color.Blue, Color.DarkBlue);
+            App.Current.SetAppThemeColor(Button.BackgroundColorProperty, Color.Aqua, Color.Black);
+            App.Current.SetAppThemeColor(StackLayout.BackgroundColorProperty, Color.Crimson, Color.DarkBlue);
+            App.Current.SetAppThemeColor(Grid.BackgroundColorProperty, Color.Crimson, Color.DarkBlue);
             await NavigationService.NavigateAsync($"NavigationPage/{nameof(MainPage)}");
         }
         #endregion
