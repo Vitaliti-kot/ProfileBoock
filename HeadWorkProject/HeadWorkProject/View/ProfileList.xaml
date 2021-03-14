@@ -37,6 +37,7 @@
                   ItemsSource="{Binding Profiles}"
                   HasUnevenRows="True"
                   ItemTapped="ListView_ItemTapped"
+                  ItemSelected="ListView_ItemSelected"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -73,5 +74,6 @@
         <Button Grid.Row="0" Command="{Binding AddNewProfile}" Text="+" FontAttributes="Bold" FontSize="Large" BackgroundColor="Blue" TextColor="White" FlowDirection="MatchParent" WidthRequest="60" BorderWidth="3" BorderColor="Black" CornerRadius="30" Margin="0,0,20,22" VerticalOptions="End" HorizontalOptions="End" HeightRequest="60"/>
         <Button Command="{Binding EditProfileCommand}" x:Name="butEdit" IsVisible="false"/>
         <Button Command="{Binding DeleteProfileCommand}" x:Name="butDelete" IsVisible="false"/>
+        <Button Command="{Binding ShowDialog}" x:Name="butDialog" IsVisible="false"/>
     </Grid>    
 </ContentPage>

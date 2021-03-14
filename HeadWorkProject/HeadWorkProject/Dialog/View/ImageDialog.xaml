@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HeadWorkProject.Dialog.ImageDialog"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:Custom="http://prismlibrary.com"
+             xmlns:viewmodel="clr-namespace:HeadWorkProject.ViewModel"
+             xmlns:model="clr-namespace:HeadWorkProject.Model"
+             xmlns:viewmodel1="clr-namespace:HeadWorkProject.Dialog.ViewModel"
+             x:DataType="viewmodel1:DialogViewModel"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Name="SLayout"
+              Custom:DialogLayout.CloseOnBackgroundTapped="True">
+    <ImageButton
+        Aspect="AspectFill"
+        Source="{Binding SelectedImage}"
+        VerticalOptions="Center"
+        HorizontalOptions="Center"
+        HeightRequest="256"
+        WidthRequest="256"
+        />
+    
+
+</StackLayout>

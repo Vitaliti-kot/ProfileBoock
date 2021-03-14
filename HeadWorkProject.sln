@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadWorkProject.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadWorkProject.iOS", "HeadWorkProject\HeadWorkProject.iOS\HeadWorkProject.iOS.csproj", "{59E8158E-C1F7-4DE0-B636-63DBF9BDFFA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeadWorkProject", "HeadWorkProject\HeadWorkProject\HeadWorkProject.csproj", "{28277F96-42EF-4919-BE98-6B71E6AA2F91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadWorkProject", "HeadWorkProject\HeadWorkProject\HeadWorkProject.csproj", "{28277F96-42EF-4919-BE98-6B71E6AA2F91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

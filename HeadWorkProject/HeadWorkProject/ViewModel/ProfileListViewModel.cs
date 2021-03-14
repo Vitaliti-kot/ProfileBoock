@@ -1,10 +1,12 @@
-﻿using HeadWorkProject.Model;
+﻿using HeadWorkProject.Dialog;
+using HeadWorkProject.Model;
 using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Repositoryi;
 using HeadWorkProject.View;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -16,14 +18,17 @@ namespace HeadWorkProject.ViewModel
     {
 
         private int _id;
+        private string _icon;
         public bool NavFromMainPage = true;
         public ICommand EditProfileCommand { protected set; get; }
         public ICommand DeleteProfileCommand { protected set; get; }
         public ICommand AddNewProfile { protected set; get; }
+        public ICommand ShowDialog { protected set; get; }
 
         private readonly INavigationService _navigationService;
         private IRepositoryProfile _repositoryProfile;
         private INavigationParameters _parameters;
+        private IDialogService _dialogService { get; }
         public ObservableCollection<Profile> Profiles { get; set; }
 
         private int userId;
@@ -31,6 +36,15 @@ namespace HeadWorkProject.ViewModel
         {
             get { return userId; }
             set { SetProperty(ref userId, value); }
+        }
+
+        public string Icon
+        {
+            get { return _icon; }
+            set
+            {
+                SetProperty(ref _icon, value);
+            }
         }
         public int Id
         {
@@ -41,16 +55,26 @@ namespace HeadWorkProject.ViewModel
             }
         }
 
-        public ProfileListViewModel(INavigationService navigation)
+        public ProfileListViewModel(INavigationService navigation, IDialogService dialogService)
         {
             _navigationService = navigation;
             _repositoryProfile = new ProfilesRepository();
+            _dialogService = dialogService;
             Profiles = new ObservableCollection<Profile>();
             EditProfileCommand = new Command(EditProfileComm);
             DeleteProfileCommand = new Command(DeleteProfile);
             AddNewProfile = new Command(AddProfile);
+            ShowDialog = new Command(OnShowDialogExecute);
         }
 
+        private void OnShowDialogExecute(object obj)
+        {
+            Icon = obj.ToString();
+            _dialogService.ShowDialog($"{nameof(ImageDialog)}", new DialogParameters
+            {
+                {"Icon", Icon }
+            });
+        }
         private async void GetCollection()
         {
             var prfls = await _repositoryProfile.GetAllAsync<Profile>();

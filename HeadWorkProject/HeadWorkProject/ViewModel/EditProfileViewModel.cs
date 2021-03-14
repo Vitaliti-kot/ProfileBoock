@@ -1,4 +1,5 @@
-﻿using HeadWorkProject.Model;
+﻿using Acr.UserDialogs;
+using HeadWorkProject.Model;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -9,6 +10,7 @@ namespace HeadWorkProject.ViewModel
 {
    public class EditProfileViewModel : BindableBase, INavigationAware, IDestructible
     {
+
         private readonly INavigationService _navigationService;
         private Profile _profile;
         public Profile EditingProfile
@@ -44,6 +46,21 @@ namespace HeadWorkProject.ViewModel
 
         private void PerformEditPhoto()
         {
+            UserDialogs.Instance.ActionSheet(new ActionSheetConfig()
+                            .SetTitle("Выберите действие")
+                            .Add("Фото с камеры", OpenCamera, "ic_camera_alt_black.png")
+                            .Add("Фото с галереи", OpenFolder, "ic_collections_black.png")
+                            .SetCancel("Закрыть",null)
+                        );
+        }
+
+        private void OpenCamera()
+        {
+
+        }
+        private void OpenFolder()
+        {
+
         }
 
         private ICommand nickNameChangedCommand;

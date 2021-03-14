@@ -67,13 +67,14 @@ namespace HeadWorkProject.ViewModel
                     Password = Password1
                 };
                 var id = await _repository.InsertAsync(user);
-                UserDialogs.Instance.Alert($"id={id}");
+               // UserDialogs.Instance.Alert($"id={id}");
                 user.Id = id;
                 var parameters = new NavigationParameters
                 {
                     { nameof(Login), Login }
                 };
-                await _navigationService.NavigateAsync($"{nameof(MainPage)}", parameters);
+                await _navigationService.GoBackAsync(parameters);
+               // await _navigationService.NavigateAsync($"{nameof(MainPage)}", parameters);
                 
             }
         }

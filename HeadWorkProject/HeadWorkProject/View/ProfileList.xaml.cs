@@ -29,12 +29,18 @@ namespace HeadWorkProject.View
             item.Command.Execute(Profile);
         }
 
-        private void MenuItemDelete_Clicked(object sender, EventArgs e)
+        private async void MenuItemDelete_Clicked(object sender, EventArgs e)
         {
-            var item = sender as MenuItem;
-            item.Command = butDelete.Command;
-            Profile = item.BindingContext as Profile;
-            item.Command.Execute(Profile);
+            var res = await UserDialogs.Instance.ConfirmAsync("Вы уверенны, что хотите удалить пользователя?", Title = "Предупреждение.", "Продолжить", "Отмена");
+           // var res = await DisplayAlert(Title = "Предупреждение.", "Вы уверенны, что хотите удалить пользователя?", "Продолжить", "Отмена");
+            if (res)
+            {
+                var item = sender as MenuItem;
+                item.Command = butDelete.Command;
+                Profile = item.BindingContext as Profile;
+                item.Command.Execute(Profile);
+            }
+           
         }
         private void ListView_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {
@@ -56,6 +62,19 @@ namespace HeadWorkProject.View
             listView.RefreshCommand.Execute(sender);
            // Task.Delay(5000);
             UpdateChildrenLayout();
+        }
+
+
+        private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem != null)
+            {
+                var profile = e.SelectedItem as Profile;
+                string icon = profile.Icon;
+                butDialog.Command.Execute(icon);
+                listView.SelectedItem = null;
+            }
+            
         }
 
     }

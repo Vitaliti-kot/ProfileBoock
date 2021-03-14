@@ -67,6 +67,8 @@ namespace HeadWorkProject.ViewModel
                 {
                     { $"{nameof(UserId)}", UserId }
                 };
+                Login = "";
+                Password = "";
                 await _navigationService.NavigateAsync($"{nameof(ProfileList)}", parameters);
             }
         }

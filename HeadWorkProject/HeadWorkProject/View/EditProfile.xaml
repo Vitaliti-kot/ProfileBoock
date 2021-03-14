@@ -18,10 +18,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="10" Padding="5">
-                <Image Source="{Binding EditingProfile.Icon}"/>
-            </Grid>
-            <Grid Grid.Row="0" Margin="10">
-                <Button Text="Изменить фото" WidthRequest="40" HeightRequest="40" CornerRadius="10" VerticalOptions="End" HorizontalOptions="End" Command="{Binding EditPhoto}"/>
+                <ImageButton Source="{Binding EditingProfile.Icon}" Command="{Binding EditPhoto}"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Entry Text="{Binding EditingProfile.NickName}" Placeholder="Введите ник" Margin="10"/>

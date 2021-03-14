@@ -13,5 +13,9 @@ namespace HeadWorkProject.View
             InitializeComponent();
         }
 
+        private void ImageButton_Clicked(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

@@ -1,10 +1,10 @@
-﻿using HeadWorkProject.Srvices;
+﻿using HeadWorkProject.Dialog;
+using HeadWorkProject.Dialog.ViewModel;
 using HeadWorkProject.Srvices.Repository;
 using HeadWorkProject.Srvices.Repositoryi;
 using HeadWorkProject.Srvices.Verification;
 using HeadWorkProject.View;
 using HeadWorkProject.ViewModel;
-using Prism;
 using Prism.Ioc;
 using Prism.Unity;
 using Xamarin.Forms;
@@ -39,6 +39,7 @@ namespace HeadWorkProject
             containerRegistry.RegisterForNavigation<PageSignUp, PageSignUpViewModel>();
             containerRegistry.RegisterForNavigation<ProfileList, ProfileListViewModel>();
             containerRegistry.RegisterForNavigation<EditProfile, EditProfileViewModel>();
+            containerRegistry.RegisterDialog<ImageDialog, DialogViewModel>();
         }
         protected override async void OnInitialized()
         {
